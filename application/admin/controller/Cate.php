@@ -11,5 +11,8 @@ namespace app\admin\controller;
 
 class Cate
 {
+    public function lst(){
+        return view();
+    }
 
 }
