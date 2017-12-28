@@ -17,5 +17,8 @@ class Admin
     public function add(){
 
     }
+    public function del(){
+
+    }
 
 }
