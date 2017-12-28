@@ -14,5 +14,8 @@ class Admin
     public function lst(){
 
     }
+    public function add(){
+
+    }
 
 }
