@@ -14,5 +14,7 @@ class Cate
     public function lst(){
         return view();
     }
-
+    public function add(){
+        
+    }
 }
