@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/12/28
- * Time: 3:10
- */
 
 namespace app\admin\controller;
+use app\admin\controller\Common;
 
-
-class Cate
+class Cate extends Common
 {
     public function lst(){
         return view();
     }
     public function add(){
-        
+        return view();
     }
 }
