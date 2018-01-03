@@ -1,11 +1,49 @@
 <?php
 namespace app\admin\controller;
-use think\Controller;
+use app\admin\controller\Common;
 
-class Conf extends Controller
+class Conf extends Common
 {
     public function conflst()
     {
+        if(request()->isPost()){
+            $data = input('post.');
+           // dump($data);
+            $enameArr=db('conf')->column('ename');
+            $imgcolum=db('conf')->where('dt_type',6)->column('ename');
+            $confArr=array();
+          //  dump($enameArr);die();
+            foreach($data as $k=>$v){
+                $confArr[]=$k;
+                if(is_array($v)){
+                    $v=implode(',',$v);
+                }
+                db('conf')->where('ename',$k)->update(['value'=>$v]);
+            }
+            foreach($enameArr as $k=>$v){
+                if(!in_array($v,$confArr)&&!in_array($v,$imgcolum)){
+                    db('conf')->where('ename',$v)->update(['value'=>'']);
+                }
+            }
+            //附件类型处理
+
+            foreach($imgcolum as $k=>$v){
+                if($_FILES[$v]['tmp_name']!=''){
+                    $file = request()->file($v);
+                    $info = $file->move(ROOT_PATH.'public/static/admin/uploads');
+                    $imgSrc = $info->getSaveName();
+                    if($imgSrc != '') {
+                        db('conf')->where('ename', $v)->update(['value' => $imgSrc]);
+                    }
+                }
+
+            }
+            //dump($imgcolum);die();
+            $this->success('修改配置成功！',url('conflst'));
+            return;
+        }
+        $confRes = db('conf')->select();
+        $this->assign('confRes',$confRes);
         return view();
     }
 
