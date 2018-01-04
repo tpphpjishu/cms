@@ -9,8 +9,7 @@
     <!-- Sidebar Menu -->
     <ul class="nav sidebar-menu">
         <!--Dashboard-->
-        <li {if condition="$con eq 'Conf'" }class="open" {
-        /if}>
+        <li {if condition="$con eq 'Conf'" } class="open" {/if} >
         <a href="#" class="menu-dropdown">
             <i class="menu-icon fa  fa-cog"></i>
             <span class="menu-text">系统设置</span>
@@ -51,7 +50,7 @@
             </ul>
         </li>
 
-        <li {if condition = "$con eq 'Cate'"}class="open"{/if}>
+        <li {if condition="$con eq 'Cate'" }class="open" {/if}>
             <a href="#" class="menu-dropdown">
                 <i class="menu-icon fa fa-folder"></i>
                 <span class="menu-text">栏目管理</span>

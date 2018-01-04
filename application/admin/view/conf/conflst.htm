@@ -130,7 +130,8 @@
                                                         <?php  endif;?>
 
                                                         <?php if($v['dt_type']==6):?><!---附件类型-->
-                                                        <input multiple="" name="<?php echo $v['ename']?>" type="file" value="<?php echo $v['value']?>">
+                                                        <input multiple="" name="<?php echo $v['ename']?>" type="file" style="float: left;" value="<?php echo $v['value']?>">
+                                                        {if condition="$v['value']"}<img height="30" src="__ADMIN__/uploads/{$v.value}">{else /}未上传{/if}
                                                         <?php endif;?>
 
                                                     </div>
@@ -196,7 +197,8 @@
                                                         <?php  endif;?>
 
                                                         <?php if($v['dt_type']==6):?><!---附件类型-->
-                                                        <input multiple="" name="<?php echo $v['ename']?>" type="file">
+                                                        <input multiple="" name="<?php echo $v['ename'];?>" style="float: left;" type="file">
+                                                        {if condition="$v['value']"}<img height="30" src="__ADMIN__/uploads/{$v.value}">{else /}未上传{/if}
                                                         <?php endif;?>
 
                                                     </div>
@@ -262,7 +264,8 @@
                                                         <?php  endif;?>
 
                                                         <?php if($v['dt_type']==6):?><!---附件类型-->
-                                                        <input multiple="" name="<?php echo $v['ename']?>" type="file">
+                                                        <input multiple="" name="<?php echo $v['ename']?>" style="float: left;" type="file">
+                                                        {if condition="$v['value']"}<img height="30" src="__ADMIN__/uploads/{$v.value}">{else /}未上传{/if}
                                                         <?php endif;?>
 
                                                     </div>

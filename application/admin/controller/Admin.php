@@ -7,9 +7,9 @@
  */
 
 namespace app\admin\controller;
+use app\admin\controller\Common;
 
-
-class Admin
+class Admin extends Common
 {
     public function lst(){
 

@@ -9,6 +9,27 @@ class Cate extends Common
         return view();
     }
     public function add(){
+        if(request()->isPost()){
+            $data = input('post.');
+            $add=db('cate')->insert($data);
+            if($add){
+                $this->success('添加栏目成功',url('lst'));
+            }else{
+                $this->success('添加栏目失败');
+            }
+            return;
+        }
         return view();
+    }
+    public function upimg(){
+        $file = request()->file('img');
+        $info = $file->move(ROOT_PATH.'public/static/admin/uploads/cateimg');
+        if($info){
+            //成功上传后，获取上传信息
+            echo $info->getSaveName();
+        }else{
+            //s上传失败获取错误信息
+            echo $file->getError();
+        }
     }
 }
