@@ -6,6 +6,8 @@ use app\admin\controller\Common;
 class Cate extends Common
 {
     public function lst(){
+        $cateRes = model('cate')->catetree();
+        $this->assign('cateRes',$cateRes);
         return view();
     }
     public function add(){
@@ -30,6 +32,23 @@ class Cate extends Common
         }else{
             //s上传失败获取错误信息
             echo $file->getError();
+        }
+    }
+
+    public function changestatus(){
+        if(request()->isAjax()) {
+            $cateid = input("cateid");
+            $status = db('cate')->field('status')->where('id', $cateid)->find();
+            $status = $status['status'];
+            if ($status == 1) {
+                db('cate')->where('id', $cateid)->update(['status' => 0]);
+                echo 1;
+            } else {
+                db('cate')->where('id', $cateid)->update(['status' => 1]);
+                echo 2;
+            }
+        }else{
+            $this->error('非法操作！');
         }
     }
 }
