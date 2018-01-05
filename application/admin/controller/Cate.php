@@ -51,4 +51,14 @@ class Cate extends Common
             $this->error('非法操作！');
         }
     }
+
+    public function del_sort(){
+        $data = input('post.');
+        dump($data);die();
+        foreach($data['sort'] as $k=>$v){
+            dump($k);die();
+            db('cate')->where('id',$k)->update(['sort'=>$v]);
+        }
+        $this->success('数据处理成功！');
+    }
 }
