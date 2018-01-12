@@ -21,6 +21,11 @@
 
     <script src="__ADMIN__/style/jquery_002.js"></script>
     <script src="__ADMIN__/plus/uploadify/jquery.uploadify.min.js"></script>
+    <!-- 配置文件 -->
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/lang/zh-cn/zh-cn.js"></script>
 
     <script type="text/javascript">
         $(function () {
@@ -128,6 +133,10 @@
                                                     <div class="col-sm-6">
                                                         <select name="pid">
                                                             <option value="0">顶级栏目</option>
+                                                            {volist name="cateRes" id="cate"}
+                                                            <option value="{$cate.id}" {if condition="$cate['id'] eq $cateid"}selected="selected"{/if}>
+                                                                <?php echo str_repeat('-',$cate['level']*8);?>{$cate.cate_name}</option>
+                                                            {/volist}
                                                         </select>
                                                     </div>
                                                     <p class="help-block col-sm-4 red">* 必填</p>
@@ -188,15 +197,22 @@
                                                                 <span class="text">列表页栏目 </span>
                                                             </label>
                                                         </div>
-                                                        <div class="radio">
+                                                        <div class="radio" style="float: left;padding-left: 10px">
                                                             <label>
                                                                 <input class="inverted" name="cate_attr" value="2"
                                                                        checked="checked" type="radio">
                                                                 <span class="text">封面频道栏目 </span>
                                                             </label>
                                                         </div>
+                                                        <div class="radio" style="float: left;padding-left: 10px">
+                                                            <label>
+                                                                <input class="inverted" name="cate_attr" value="3"
+                                                                       checked="checked" type="radio">
+                                                                <span class="text">外链栏目 </span>
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                    <p class="help-block col-sm-4 red">* 必填</p>
+
                                                 </div>
 
                                                 <div class="form-group">
@@ -221,12 +237,22 @@
 
                                                 <div class="form-group">
                                                     <label for=""
-                                                           class="col-sm-2 control-label no-padding-right">内容也模板</label>
+                                                           class="col-sm-2 control-label no-padding-right">内容页模板</label>
                                                     <div class="col-sm-6">
                                                         <input class="form-control"  placeholder=""
                                                                name="article_tmp" value="article_article.html" required="" type="text">
                                                     </div>
                                                     <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">外链地址</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="link" value="http://" required="" type="text">
+                                                    </div>
+
                                                 </div>
                                             </div>
 
@@ -270,7 +296,7 @@
                                                         <div class="widget-body">
                                                             <div class="widget-main no-padding">
 
-                                                                    <textarea id="summernote"  class="form-control" name="content"></textarea>
+                                                                    <textarea id="content"  name="content"></textarea>
 
                                                             </div>
                                                         </div>
@@ -305,9 +331,32 @@
 <script src="__ADMIN__/style/bootstrap.js"></script>
 <!--Beyond Scripts-->
 <script src="__ADMIN__/style/beyond.js"></script>
-<script src="__ADMIN__/style/summernote.js"></script>
-<script>
-    $('#summernote').summernote({height: 300});
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var option={
+        toolbars:[[
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment',
+        ]
+        ]
+    };
+     UE.getEditor('content',{ toolbars:[[
+         'fullscreen', 'source', '|', 'undo', 'redo', '|',
+         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+         'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+         'directionalityltr', 'directionalityrtl', 'indent', '|',
+         'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+         'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+         'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment',
+     ]
+     ],initialFrameWidth:1500,initialFrameHeight:400});
 </script>
 
 </body>

@@ -47,7 +47,7 @@
                 <!-- Page Body -->
                 <div class="page-body">
                     
-<button type="button" tooltip="添加用户" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '/admin/user/add.html'"> <i class="fa fa-plus"></i> Add
+<button type="button" tooltip="添加栏目" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('add')}'"> <i class="fa fa-plus"></i> Add
 </button>
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
@@ -60,7 +60,7 @@
                             <tr>
                                 <th class="text-center">
                                     <label>
-                                        <input name="contacway[]" class="colored-blue" value="电话" type="checkbox">
+                                        <input id="checkall" class="colored-blue" type="checkbox">
                                         <span class="text"></span>
                                         </label>
                                 </th>
@@ -76,25 +76,27 @@
                         <tbody>
                         {volist name="cateRes" id="cate"}
                         <tr>
-                            <th class="text-center">
+                            <td align="center">
                                 <label>
                                     <input name="itm[]" class="colored-blue" value="{$cate.id}" type="checkbox">
                                     <span class="text"></span>
                                 </label>
-                            </th>
+                            </td>
                                 <td align="center">{$cate.id}</td>
                                 <td align="center" class="c{$i}"><span class="fh"></span><span><?php echo str_repeat('-',$cate['level']*8);?></span>
-                                    <a href="#" class="cate" pid="{$cate.pid}"><b>{$cate.cate_name}</b></a> </td>
+                                    <a href="#" class="cate" pid="{$cate.pid}"><b>{$cate.cate_name}</b></a>
+                                    <a class="btn btn-sm btn-azure btn-addon" style="float: right;" href="{:url('add',array('cateid'=>$cate['id']))}"><i class="fa fa-plus"></i>添加子栏目</a>
+                                </td>
                             <td align="center"><a cateid="{$cate.id}" onclick="changestatus(this)" {if condition="$cate['status'] eq 1"}class="btn btn-primary btn-sm shiny"{else/} class="btn btn-danger btn-sm shiny"{/if}>
                                 {if condition="$cate['status'] eq 1"}显示{else/}隐藏{/if}</a></td>
                             <td align="center">{if condition="$cate['cate_attr']" eq 1} 列表栏目{else /}频道封面{/if}</td>
                             <td align="center">test</td>
-                            <td align="center"><input type="text" name="sort[]" value="{$cate.sort}" style="width: 50px;text-align: center;"></td>
+                            <td align="center"><input type="text" name="sort[{$cate.id}]" value="{$cate.sort}" style="width: 50px;text-align: center;"></td>
                                 <td align="center">
-                                    <a href="/admin/user/edit/id/6.html" class="btn btn-primary btn-sm shiny">
+                                    <a href="{:url('edit',array('cateid'=>$cate['id']))}" class="btn btn-primary btn-sm shiny">
                                         <i class="fa fa-edit"></i> 编辑
                                     </a>
-                                    <a href="#" onClick="warning('确实要删除吗', '/admin/user/del/id/6.html')" class="btn btn-danger btn-sm shiny">
+                                    <a href="#" onClick="warning('确实要删除吗', '{:url('cate/del',array('cateid'=>$cate['id']))}')" class="btn btn-danger btn-sm shiny">
                                         <i class="fa fa-trash-o"></i> 删除
                                     </a>
                                 </td>
@@ -151,7 +153,17 @@
                 }
             });
         }
+
+        //全选处理
+        $("#checkall").click(function(){
+            if($("#checkall").attr("checked")){
+                $(".colored-blue").removeAttr("checked");
+            }else{
+                $(".colored-blue").attr("checked","checked");
+            }
+        });
     </script>
+
 
 
 </body></html>

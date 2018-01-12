@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CATE</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/plus/uploadify/jquery.uploadify.min.js"></script>
+    <!-- 配置文件 -->
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#uploadify").uploadify({
+                //指定swf文件
+                'swf': "__ADMIN__/plus/uploadify/uploadify.swf",
+                //后台处理的页面
+                'uploader': "{:url('cate/upimg')}",
+                'progressData' : 'speed',
+                //按钮显示的文字
+                'buttonText': '上传文件',
+                //按钮样式
+                'buttonClass' : 'btn btn-azure',
+                //显示的高度和宽度，默认 height 30；width 120
+                //'height': 15,
+                //'width': 80,
+                //上传文件的类型  默认为所有文件    'All Files'  ;  '*.*'
+                //在浏览窗口底部的文件类型下拉菜单中显示的文本
+                'fileTypeDesc': 'Image Files',
+                //设定发送数据的name值
+                'fileObjName':'img',
+                //允许上传的文件后缀
+                'onUploadSuccess':function(file,data,response){
+                    $("input[name='img']").val(data);
+                    var cateimgsrc = "__ADMIN__/uploads/cateimg/"+data;
+                    var cateimg = "<img height='50' src='"+cateimgsrc+"'>"
+                    $("#cateimgdiv").show();
+                    $("#cateimg").html(cateimg);
+                }
+            });
+            $("#uploadify-button").removeAttr('style');
+        });
+    </script>
+</head>
+<body>
+<!-- 头部 -->
+{include file='common/head'}
+
+<!-- /头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        {include file='common/left'}
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Breadcrumb -->
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">系统</a>
+                    </li>
+                    <li>
+                        <a href="#">栏目管理</a>
+                    </li>
+                    <li class="active">添加栏目</li>
+                </ul>
+            </div>
+            <!-- /Page Breadcrumb -->
+
+            <!-- Page Body -->
+            <div class="page-body">
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                            <div class="widget-body">
+                                <div class="widget-main ">
+                                    <div class="tabbable">
+                                        <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                                            <li class="active">
+                                                <a data-toggle="tab" href="#home11">
+                                                    基本信息
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a data-toggle="tab" href="#profile11">
+                                                    SEO设置
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a data-toggle="tab" href="#profile12">
+                                                    栏目内容
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content tabs-flat">
+                                            <div id="home11" class="tab-pane in active">
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                                    <div class="col-sm-6">
+                                                        <select name="model_id">
+                                                            <option>选择模型</option>
+                                                            <option value="1">文章模型</option>
+                                                            <option value="2">电影模型</option>
+                                                        </select>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">上级栏目</label>
+                                                    <div class="col-sm-6">
+                                                        <select name="pid">
+                                                            <option value="0">顶级栏目</option>
+                                                            {volist name="cateRes" id="cate"}
+                                                            <option value="{$cate.id}" {if condition="$cate['id'] eq $cateid"}selected="selected"{/if}>
+                                                            <?php echo str_repeat('-',$cate['level']*8);?>{$cate.cate_name}</option>
+                                                            {/volist}
+                                                        </select>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">栏目名称</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="cate_name" required="" type="text">
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">隐藏栏目</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="col-xs-4">
+                                                            <label>
+                                                                <input value="0" name="status" class="checkbox-slider colored-blue"
+                                                                       type="checkbox">
+                                                                <span class="text"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">栏目图片</label>
+                                                    <div class="col-sm-6">
+                                                        <label>
+                                                            <span id="uploadify"></span>
+                                                            <span class="text"></span>
+                                                            <input name="img" value="" type="hidden">
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group" id="cateimgdiv" style="display: none">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right"></label>
+                                                    <div class="col-sm-6">
+                                                        <label id="cateimg">
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">栏目属性</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio" style="float: left;padding-left: 10px">
+                                                            <label>
+                                                                <input name="cate_attr" value="1" checked="checked"
+                                                                       type="radio">
+                                                                <span class="text">列表页栏目 </span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio" style="float: left;padding-left: 10px">
+                                                            <label>
+                                                                <input class="inverted" name="cate_attr" value="2"
+                                                                       checked="checked" type="radio">
+                                                                <span class="text">封面频道栏目 </span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio" style="float: left;padding-left: 10px">
+                                                            <label>
+                                                                <input class="inverted" name="cate_attr" value="3"
+                                                                       checked="checked" type="radio">
+                                                                <span class="text">外链栏目 </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">列表页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="list_tmp" value="list_article.html" required="" type="text">
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">频道页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="index_tmp" value="index_article.html" required="" type="text">
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">内容页模板</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="article_tmp" value="article_article.html" required="" type="text">
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">外链地址</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="link" value="http://" required="" type="text">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div id="profile11" class="tab-pane">
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">栏目标题</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="title" required="" type="text">
+                                                    </div>
+                                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">关键词</label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control"  placeholder=""
+                                                               name="keywords" required="" type="text">
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for=""
+                                                           class="col-sm-2 control-label no-padding-right">描述</label>
+                                                    <div class="col-sm-6">
+                                                        <textarea class="form-control" name="desc"></textarea>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div id="profile12" class="tab-pane">
+
+
+                                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                                    <div class="widget flat radius-bordered">
+
+                                                        <div class="widget-body">
+                                                            <div class="widget-main no-padding">
+
+                                                                <textarea id="content"  name="content"></textarea>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default">保存信息</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+</div>
+
+<!--Basic Scripts-->
+
+<script src="__ADMIN__/style/bootstrap.js"></script>
+<!--Beyond Scripts-->
+<script src="__ADMIN__/style/beyond.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var option={
+        toolbars:[[
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment',
+        ]
+        ]
+    };
+    UE.getEditor('content',{ toolbars:[[
+        'fullscreen', 'source', '|', 'undo', 'redo', '|',
+        'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+        'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+        'directionalityltr', 'directionalityrtl', 'indent', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+        'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+        'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment',
+    ]
+    ],initialFrameWidth:1500,initialFrameHeight:400});
+</script>
+
+</body>
+</html>

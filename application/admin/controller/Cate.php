@@ -11,8 +11,11 @@ class Cate extends Common
         return view();
     }
     public function add(){
+
         if(request()->isPost()){
+
             $data = input('post.');
+
             $add=db('cate')->insert($data);
             if($add){
                 $this->success('添加栏目成功',url('lst'));
@@ -21,8 +24,33 @@ class Cate extends Common
             }
             return;
         }
+        $cateid = input('cateid');
+        $cateRes = model('cate')->catetree();
+
+        $this->assign(
+            array(
+                'cateRes'=>$cateRes,
+                'cateid'=>$cateid,
+            ));
+
         return view();
     }
+
+    //编辑栏目
+    public function edit(){
+        $cateid = input('cateid');
+        $cateRes = model('cate')->catetree();
+        $cates=db('cate')->find($cateid);
+
+        $this->assign(
+            array(
+                'cateRes'=>$cateRes,
+                'cateid'=>$cateid,
+            ));
+        return view();
+
+    }
+
     public function upimg(){
         $file = request()->file('img');
         $info = $file->move(ROOT_PATH.'public/static/admin/uploads/cateimg');
@@ -54,11 +82,44 @@ class Cate extends Common
 
     public function del_sort(){
         $data = input('post.');
-        dump($data);die();
-        foreach($data['sort'] as $k=>$v){
-            dump($k);die();
-            db('cate')->where('id',$k)->update(['sort'=>$v]);
+       // dump($data);die();
+//        foreach($data['sort'] as $k=>$v){
+//            dump($k);die();
+//            db('cate')->where('id',$k)->update(['sort'=>$v]);
+//        }
+        if($data['itm']){
+            model('cate')->pdel($data['itm']);
+//            foreach ($data['itm'] as $k =>$v){
+//                $childrenidsarr[]=model('cate')->childrenids($v);
+//                $childrenidsarr[]=(int)$v;
+//            }
+//            $_childrenidsarr =array();
+//            foreach($childrenidsarr as $k=>$v){
+//                if(is_array($v)){
+//
+//                    foreach($v as $k1=>$v1){
+//                        $_childrenidsarr[] =$v1;
+//                    }
+//                }else{
+//                    $_childrenidsarr[] =$v;
+//                }
+//            }
+//            $_childrenidsarr=array_unique($_childrenidsarr);
+//            db('cate')->delete($_childrenidsarr);
         }
-        $this->success('数据处理成功！');
+        $this->success('数据处理成功！',url('lst'));
+    }
+
+    public function del(){
+        $cateid=input('cateid');
+        $childrenids=model('cate')->childrenids($cateid);
+        $childrenids[]=$cateid;
+        $del=db('cate')->delete($childrenids);
+        if($del){
+            $this->success('删除栏目成功',url('lst'));
+        }else{
+            $this->error('删除栏目失败');
+        }
+
     }
 }

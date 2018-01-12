@@ -19,6 +19,44 @@ class Cate extends Model
         }
         return $arr;
     }
+    //获取子栏目id
+    public function childrenids($cateid){
+        $data=$this->field('id,pid')->select();
+       return $this->_childrenids($data,$cateid);
+    }
+    private function _childrenids($data,$cateid){
+        static $arr=array();
+        foreach($data as $k=>$v){
+            if($v['pid']==$cateid){
+                $arr[]=$v['id'];
+            $this->_childrenids($data,$v['id']);
+            }
+        }
+        return $arr;
+
+    }
+
+    //处理批量删除
+    public function pdel($cateids){
+
+        foreach ($cateids as $k =>$v){
+            $childrenidsarr[]=$this->childrenids($v);
+            $childrenidsarr[]=(int)$v;
+        }
+        $_childrenidsarr =array();
+        foreach($childrenidsarr as $k=>$v){
+            if(is_array($v)){
+
+                foreach($v as $k1=>$v1){
+                    $_childrenidsarr[] =$v1;
+                }
+            }else{
+                $_childrenidsarr[] =$v;
+            }
+        }
+        $_childrenidsarr=array_unique($_childrenidsarr);
+        $this::destroy($_childrenidsarr);
+    }
 
 
 }
