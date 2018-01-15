@@ -31,6 +31,7 @@ class Cate extends Common
             array(
                 'cateRes'=>$cateRes,
                 'cateid'=>$cateid,
+
             ));
 
         return view();
@@ -38,6 +39,24 @@ class Cate extends Common
 
     //编辑栏目
     public function edit(){
+        if(request()->isPost()){
+            $data = input('post.');
+           $_data=array();
+            foreach($data as $k=>$v){
+                $_data[]=$k;
+            }
+           // dump($_data);die();
+            if(!in_array('status',$_data)){
+                $data['status']=1;
+            }
+            $save=db('cate')->update($data);
+            if($save){
+                $this->success('修改栏目成功',url('lst'));
+            }else{
+                $this->success('修改栏目失败');
+            }
+            return;
+        }
         $cateid = input('cateid');
         $cateRes = model('cate')->catetree();
         $cates=db('cate')->find($cateid);
@@ -46,6 +65,7 @@ class Cate extends Common
             array(
                 'cateRes'=>$cateRes,
                 'cateid'=>$cateid,
+                'cates'=>$cates,
             ));
         return view();
 
@@ -120,6 +140,16 @@ class Cate extends Common
         }else{
             $this->error('删除栏目失败');
         }
+    }
 
+    public function delimg(){
+        $imgurl = input('imgurl');
+        $imgurl =ADMINIMG.$imgurl;
+        $res = unlink($imgurl);
+        if($res){
+            echo 1;
+        }else{
+            echo 2;
+        }
     }
 }

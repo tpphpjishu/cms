@@ -56,6 +56,7 @@
                     $("#cateimg").html(cateimg);
                 }
             });
+            $('#uploadify-button').prepend("<i style='padding-right: 0px;' class='fa fa-upload'> </i>");
             $("#uploadify-button").removeAttr('style');
         });
     </script>
@@ -173,6 +174,11 @@
                                                             <span class="text"></span>
                                                             <input name="img" value="" type="hidden">
                                                         </label>
+                                                        <label>
+                                                            <div id="cancel" style="float: left" class="uploadify-button btn btn-azure">
+                                                                <span class="uploadify-button-text"><i style="padding-right: 10px;" class="fa fa-rotate-left"> </i>撤销上传</span>
+                                                            </div>
+                                                        </label>
                                                     </div>
 
                                                 </div>
@@ -220,7 +226,7 @@
                                                            class="col-sm-2 control-label no-padding-right">列表页模板</label>
                                                     <div class="col-sm-6">
                                                         <input class="form-control"  placeholder=""
-                                                               name="list_tmp" value="list_article.html" required="" type="text">
+                                                               name="list_tmp" value="list_article.html" checked="checked" required="" type="text">
                                                     </div>
                                                     <p class="help-block col-sm-4 red">* 必填</p>
                                                 </div>
@@ -357,6 +363,30 @@
          'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment',
      ]
      ],initialFrameWidth:1500,initialFrameHeight:400});
+    $('#cancel').click(function(){
+        var imgurl =$("input[name='img']").val();
+        if(!imgurl){
+            alert("请先上传图片");
+            return false;
+        }
+        $("#cateimgdiv").hide();
+        $("input[name='img']").val('');
+
+        $.ajax({
+            type: "post",
+            dateType: "json",
+            data:{imgurl:imgurl},
+            url: "{:url('Cate/delimg')}",
+            success:function (data) {
+                if(data==1){
+                    alert('撤销成功！');
+                }else {
+                    alert('撤销失败！');
+                }
+
+            }
+        });
+    });
 </script>
 
 </body>
